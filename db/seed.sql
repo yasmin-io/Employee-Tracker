@@ -1,8 +1,11 @@
 use employees;
 
-INSERT INTO departments
-    (name)
+INSERT INTO departments (name)
 VALUES
     ('Finance'),
-    ('HR'), 
-    ('Marketing');
+    ('Sales'), 
+    ('Legal'),
+    ('Service'),
+    ('Engineering');
+
+    
