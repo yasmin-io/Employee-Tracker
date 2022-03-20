@@ -6,6 +6,13 @@ class dbStore {
     this.connection = connection;
   }
 
+  // Create a new employee
+  createEmployee(employee) {
+    return this.connection
+      .promise()
+      .query("INSERT INTO employee SET ?", employee);
+  }
+
   //View all departments
   viewAllDepartments() {
     return this.connection.promise().query("SELECT * FROM departments");
