@@ -26,10 +26,25 @@ const mainOptions = () => {
           "Update Employee Role",
         ],
       },
+      {
+        type: "list",
+        name: "otheroptions",
+        message: "What would you like to do?",
+        choices: [
+          "View All Departments",
+          "View All Roles",
+          "View All Employees",
+          "Add Department",
+          "Add Role",
+          "Add Employee",
+          "Update Employee Role",
+        ],
+      },
     ])
     .then((userChoice) => {
       // If the user's Choice matches the if statement, then execute the block of code attatched.
-      if (userChoice === "View All Departments") {
+      if (userChoice.options === "View All Departments") {
+        console.log(userChoice);
         console.log("You picked option number 1!");
         viewDepartments();
       }
@@ -37,10 +52,15 @@ const mainOptions = () => {
 };
 
 function viewDepartments() {
-  dbStore.viewAllDepartments().then(([departments]) => {
+  console.log("db store:", dbStore);
+  console.log(dbStore.viewAllDepartments);
+  dbStore.viewAllDepartments().then((departments) => {
     console.log(departments);
-    console.table(departments);
+    console.log([departments]);
+    // console.table(departments);
   });
 }
+
+//Create all options here
 
 mainOptions();
