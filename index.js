@@ -11,6 +11,7 @@ function init() {
 
 // ..
 const dbStore = require("./db");
+const db = require("./db");
 // const { init } = require("express/lib/application");
 // const { type } = require("express/lib/response");
 
@@ -41,21 +42,21 @@ const mainOptions = () => {
     .then((userChoice) => {
       // If the user's Choice matches the if statement, then execute the block of code attatched.
       if (userChoice.options === "View All Departments") {
-        // console.log(userChoice);
         console.log("You picked option number 1!");
         viewDepartments();
       }
     });
 };
 
+// This function allows the user to see all the departments saved in the database.
 function viewDepartments() {
   console.log("db store:", dbStore);
   console.log(dbStore.viewAllDepartments);
   dbStore.viewAllDepartments().then((departments) => {
-    console.log(departments);
-    console.log([departments]);
-    // console.table(departments);
+    console.table(departments);
   });
+  init();
+  mainOptions();
 }
 
 //Create all options here
