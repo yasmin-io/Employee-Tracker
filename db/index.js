@@ -8,35 +8,41 @@ class dbStore {
     this.connection = connection;
   }
 
-  // Create a new employee
+  // Create a New Employee
   createEmployee(employee) {
     return this.connection
       .promise()
       .query("INSERT INTO employee SET ?", employee);
   }
 
-  //View all departments
+  // View all Departments
   viewAllDepartments() {
     return this.connection.promise().query("SELECT * FROM departments");
   }
 
-  //view all employees
+  // View all Employees
   viewAllEmployees() {
     return this.connection.promise().query("SELECT * FROM employee");
   }
 
+  // View all Roles
   viewAllRoles() {
     return this.connection.promise().query("SELECT * FROM roles");
   }
 
+  // Create a new Department
   createNewDepartment(department) {
     return this.connection
       .promise()
       .query("INSERT INTO departments SET ?", department);
   }
+
+  // Create a new Employee Role
   createNewRole(role) {
     return this.connection.promise().query("INSERT INTO roles SET ?", role);
   }
 }
 
+// Export this as a class with the connection passed through.
+// This prevents a new connection being created for every request.
 module.exports = new dbStore(connection);

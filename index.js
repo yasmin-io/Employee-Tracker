@@ -6,13 +6,14 @@ const dbStore = require("./db");
 // Console.table allows us to view tabular data as tables in the terminal.
 // Similar to how console.log will display strings or javascript objects in the console.
 require("console.table");
+
 // This is what we require to create our logos that display when you first run the command line application
 const logo = require("asciiart-logo");
-const db = require("./db");
 
 function init() {
   // logo is a function provided by asciiart-logo and you can provide an object array of text title, text description and styling.
   console.log(logo({ name: "Manager Page", font: "Speed" }).render());
+  // Then run this function to display the main options menu.
   mainOptions();
 }
 
@@ -37,7 +38,7 @@ const mainOptions = () => {
       },
     ])
     .then((userChoice) => {
-      // If the user's Choice matches the if statement, then execute the block of code attatched.
+      // If the user's Choice matches the 'if' statement, then execute the block of code attatched.
       if (userChoice.options === "View All Departments") {
         console.log("You picked option number 1!");
         viewDepartments();
@@ -59,13 +60,16 @@ const mainOptions = () => {
 
 // This function allows the user to see all the departments saved in the database.
 function viewDepartments() {
-  console.log("db store:", dbStore);
-  console.log(dbStore.viewAllDepartments);
+  // console.log("db store:", dbStore);
+  // console.log(dbStore.viewAllDepartments);
+
   dbStore
     .viewAllDepartments()
+    //After Retrieving the information, then create an object array with the return.
     .then(([departments]) => {
+      // Then pass it into the console.table to use the object array and create a table.
       console.table(departments);
-    })
+    }) // After this is complete, only then should this run the options page.
     .then(() => {
       mainOptions();
     });
@@ -73,13 +77,16 @@ function viewDepartments() {
 
 // This function allows the user to see all the employees saved in the database.
 function viewEmployees() {
-  console.log("db store:", dbStore);
-  console.log(dbStore.viewallEmployees);
+  // console.log("db store:", dbStore);
+  // console.log(dbStore.viewallEmployees);
+
   dbStore
     .viewAllEmployees()
+    //After Retrieving the information, then create an object array with the return.
     .then(([employees]) => {
+      // Then pass it into the console.table to use the object array and create a table.
       console.table(employees);
-    })
+    }) // After this is complete, only then should this run the options page.
     .then(() => {
       mainOptions();
     });
@@ -87,50 +94,64 @@ function viewEmployees() {
 
 // This function allows the user to see all the roles saved in the database.
 function viewRoles() {
-  console.log("db store:", dbStore);
-  console.log(dbStore.viewAllRoles);
+  // console.log("db store:", dbStore);
+  // console.log(dbStore.viewAllRoles);
+
   dbStore
     .viewAllRoles()
+    //After Retrieving the information, then create an object array with the return.
     .then(([roles]) => {
+      // Then pass it into the console.table to use the object array and create a table.
       console.table(roles);
-    })
+    }) // After this is complete, only then should this run the options page.
     .then(() => {
       mainOptions();
     });
 }
 
-//Create new department
-
+// User can create a new department (Create Department Includes: Name of Database)
 function createDepartmennt() {
+  // You need to prompt the user using inquirer to ask the question.
   inquirer
     .prompt([
+      // name needs to match the column of the table that this will go to
+      // For example: Departments table has: name, id for the table contents
+      // When you create a name and message using inquirer, this creates an input feild for the user.
       {
-        // name needs to match the column of the table that this will go to
         name: "name",
         message: "What is the name of the department you want to add?",
       },
-    ])
+    ]) // Pass the user's response into the dbStore function.
     .then((response) => {
       dbStore
         .createNewDepartment(response)
         .then(() => {
+          // Let the user know there department choice was inserted into the database.
           console.log(`Inserted Department ${response.name}`);
         })
         .then(() => {
+          // Only after this has completed then run the mainOptions() function.
           mainOptions();
         });
     });
 }
 
-// Create Role
+// User can create a new role (Create Role Includes: Name of role, salary of role, department it belongs to).
 function createRole() {
+  // Call the departments function which will return the contents in the table.
+  // Pass it through as an Object Array
   dbStore.viewAllDepartments().then(([departments]) => {
+    // Create a variable of choices for the inquirer prompt
+    // Loop through the departments and deconstruct them into id and name.
     const listOfDepartments = departments.map(({ id, name }) => ({
       name: name,
       value: id,
     }));
+
+    // Prompt the user with the following questions to create the role.
     inquirer
       .prompt([
+        // Match each 'name' of the question to the table. Example: salary = salary in the roles table.
         {
           name: "title",
           message: "What is the name of the role?",
@@ -140,19 +161,22 @@ function createRole() {
           message: "What is the salary for this role? ",
         },
         {
+          // The variable will display the list of of departments from above.
           type: "list",
           name: "department_id",
           message: "which department does this role belong too? ",
           choices: listOfDepartments,
         },
-      ])
+      ]) // Then the return will be then passed into the database function to create the new role.
       .then((role) => {
         dbStore
           .createNewRole(role)
           .then(() => {
+            // This lets the user know their role was just added to the db.
             console.log(`Inserted Role ${role.title}`);
           })
           .then(() => {
+            // After all this is complete, then run the function to display the main menu.
             mainOptions();
           });
       });
