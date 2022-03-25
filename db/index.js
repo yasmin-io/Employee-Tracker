@@ -1,8 +1,8 @@
-//require connection to db
+// Require connection to db.
 const connection = require("./connection");
 
-// This is where we are interacting with the database and seperating it to keep our code cleaner, more readable.
-
+// This class is where we are handling interactions with the database.
+// Seperating it from the root index.js, where we handle user interaction.
 class dbStore {
   constructor(connection) {
     this.connection = connection;
@@ -10,6 +10,8 @@ class dbStore {
 
   // Create a New Employee
   createEmployee(employee) {
+    // The information from the user is passed in as employee.
+    // We want to insert it into the db.
     return this.connection
       .promise()
       .query("INSERT INTO employee SET ?", employee);
@@ -17,6 +19,7 @@ class dbStore {
 
   // View all Departments
   viewAllDepartments() {
+    // We create
     return this.connection.promise().query("SELECT * FROM departments");
   }
 
