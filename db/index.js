@@ -44,6 +44,17 @@ class dbStore {
   createNewRole(role) {
     return this.connection.promise().query("INSERT INTO roles SET ?", role);
   }
+
+  // Create a new Employee
+  createNewEmployee(employee) {
+    return this.connection
+      .promise()
+      .query("INSERT INTO employee SET ?", employee);
+  }
+
+  quitConnection() {
+    return connection.end();
+  }
 }
 
 // Export this as a class with the connection passed through.

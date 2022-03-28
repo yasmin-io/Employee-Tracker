@@ -1,5 +1,5 @@
 // Requiring Inquirer to prompt the user with the questions we want to ask.
-const express = require("express");
+require("express");
 const inquirer = require("inquirer");
 const dbStore = require("./db");
 
@@ -9,6 +9,7 @@ require("console.table");
 
 // This is what we require to create our logos that display when you first run the command line application
 const logo = require("asciiart-logo");
+const db = require("./db");
 
 function init() {
   // logo is a function provided by asciiart-logo and you can provide an object array of text title, text description and styling.
@@ -34,6 +35,7 @@ const mainOptions = () => {
           "Add Role",
           "Add Employee",
           "Update Employee Role",
+          "Quit",
         ],
       },
     ])
@@ -54,6 +56,14 @@ const mainOptions = () => {
       } else if (userChoice.options === "Add Role") {
         console.log("You picked option number 5!");
         createRole();
+      } else if (userChoice.options === "Add Employee") {
+        console.log("You picked option number 6!");
+        createEmployee();
+      } else if (userChoice.options === "Update Employee") {
+        console.log("You picked option number 7!");
+      } else {
+        console.log("Thankyou for using this application!");
+        quit();
       }
     });
 };
@@ -181,6 +191,58 @@ function createRole() {
           });
       });
   });
+}
+
+// User can create a new employee profile()
+function createEmployee() {
+  // Return all the roles from the database.
+  dbStore.viewAllRoles().then(([roles]) => {
+    const listOfRoles = roles.map(({ id, title, salary }) => ({
+      id: id,
+      title: title,
+      salary: salary,
+    }));
+    console.log(listOfRoles);
+
+    // Prompt the user with the following questions to create the employee profile.
+    inquirer
+      .prompt([
+        {
+          name: "first_name",
+          message: "What is the employee's first name?",
+        },
+        {
+          name: "last_name",
+          message: "What is the employee's last name?",
+        },
+        {
+          type: "list",
+          name: "role_id",
+          message: "What is the employee's role?",
+          choices: listOfRoles,
+        },
+      ]) // Then add the users response into the database by passing it into
+      .then((employee) => {
+        dbStore
+          .createNewEmployee(employee)
+          .then(() => {
+            console.log(`Inserted Role ${employee.title}`);
+          })
+          .then(() => {
+            mainOptions();
+          });
+      });
+  });
+}
+
+// function updateRole() {
+
+// }
+
+// Exit Application
+function quit() {
+  dbStore.quitConnection();
+  process.exit();
 }
 
 // Run these functions when the user types ' node index.js'
