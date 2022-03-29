@@ -10,8 +10,8 @@ CREATE TABLE departments (
  CREATE TABLE roles (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, /* Links with role_id on employee table*/
     title VARCHAR(30) NOT NULL,
-    salary DECIMAL NOT NULL,
-    department_id INT UNSIGNED NOT NULL, /* Links to department */
+    salary DECIMAL,
+    department_id INT UNSIGNED, /* Links to department */
     INDEX department_index (department_id),
     CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );

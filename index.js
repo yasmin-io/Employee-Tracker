@@ -197,12 +197,10 @@ function createRole() {
 function createEmployee() {
   // Return all the roles from the database.
   dbStore.viewAllRoles().then(([roles]) => {
-    const listOfRoles = roles.map(({ id, title, salary }) => ({
+    const listOfRoles = roles.map(({ id, title }) => ({
       id: id,
-      title: title,
-      salary: salary,
+      value: title,
     }));
-    console.log(listOfRoles);
 
     // Prompt the user with the following questions to create the employee profile.
     inquirer
