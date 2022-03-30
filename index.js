@@ -119,7 +119,7 @@ function viewRoles() {
     });
 }
 
-// User can create a new department (Create Department Includes: Name of Database)
+// User can create a new department
 function createDepartmennt() {
   // You need to prompt the user using inquirer to ask the question.
   inquirer
@@ -146,7 +146,7 @@ function createDepartmennt() {
     });
 }
 
-// User can create a new role (Create Role Includes: Name of role, salary of role, department it belongs to).
+// User can create a new role
 function createRole() {
   // Call the departments function which will return the contents in the table.
   // Pass it through as an Object Array
@@ -198,10 +198,9 @@ function createEmployee() {
   // Return all the roles from the database.
   dbStore.viewAllRoles().then(([roles]) => {
     const listOfRoles = roles.map(({ id, title }) => ({
-      id: id,
-      value: title,
+      name: title,
+      value: id,
     }));
-
     // Prompt the user with the following questions to create the employee profile.
     inquirer
       .prompt([
@@ -224,6 +223,7 @@ function createEmployee() {
         dbStore
           .createNewEmployee(employee)
           .then(() => {
+            console.log(employee);
             console.log(`Inserted Role ${employee.title}`);
           })
           .then(() => {
@@ -233,9 +233,7 @@ function createEmployee() {
   });
 }
 
-// function updateRole() {
-
-// }
+// User can Update a Chosen employee
 
 // Exit Application
 function quit() {
