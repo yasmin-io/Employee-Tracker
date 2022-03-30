@@ -59,8 +59,9 @@ const mainOptions = () => {
       } else if (userChoice.options === "Add Employee") {
         console.log("You picked option number 6!");
         createEmployee();
-      } else if (userChoice.options === "Update Employee") {
+      } else if (userChoice.options === "Update Employee Role") {
         console.log("You picked option number 7!");
+        updateEmployee();
       } else {
         console.log("Thankyou for using this application!");
         quit();
@@ -234,6 +235,43 @@ function createEmployee() {
 }
 
 // User can Update a Chosen employee
+function updateEmployee() {
+  // This retrieves the roles saved in the database
+  dbStore.viewAllRoles().then(([roles]) => {
+    const listOfRoles = roles.map(({ id, title }) => ({
+      name: title,
+      value: id,
+    }));
+
+    // Prompt user with questions to update their chosen employee role
+    inquirer
+      .prompt([
+        {
+          message: "What is the first name of the employee?",
+          name: "first_name",
+        },
+        {
+          type: "list",
+          message: "What role do you want to them update to?",
+          name: "role_id",
+          choices: listOfRoles,
+        },
+      ])
+      .then((updated_employee) => {
+        dbStore
+          .updateEmployee(updated_employee)
+          .then(() => {
+            console.log(
+              `Updated ${updated_employee.first_name}  to the Role: ${updated_employee.role_id}`
+            );
+          })
+          .then(() => {
+            // Return to the main menu
+            mainOptions();
+          });
+      });
+  });
+}
 
 // Exit Application
 function quit() {
