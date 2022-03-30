@@ -52,10 +52,13 @@ class dbStore {
       .query("INSERT INTO employee SET ?", employee);
   }
 
-  updateEmployee(updated_employee) {
+  updateEmployee(employeeId, newRole) {
     return this.connection
       .promise() // I want to SET the role WHERE on employees name
-      .query("UPDATE employee SET ? WHERE ?", updated_employee);
+      .query("UPDATE employee SET role_id = ? WHERE id = ?", [
+        newRole,
+        employeeId,
+      ]);
   }
 
   quitConnection() {

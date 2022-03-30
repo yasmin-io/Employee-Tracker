@@ -221,15 +221,39 @@ function createEmployee() {
         },
       ]) // Then add the users response into the database by passing it into
       .then((employee) => {
-        dbStore
-          .createNewEmployee(employee)
-          .then(() => {
-            console.log(employee);
-            console.log(`Inserted Role ${employee.title}`);
-          })
-          .then(() => {
-            mainOptions();
-          });
+        dbStore.viewAllEmployees().then(([employees]) => {
+          const listOfEmps = employees.map(({ id, first_name, last_name }) => ({
+            name: first_name + " " + last_name,
+            value: id,
+          }));
+
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "manager_id",
+                message: "Who will be this employees manager?",
+                choices: listOfEmps,
+              },
+            ])
+            .then((manager) => {
+              const newEmployee = {
+                first_name: employee.first_name,
+                last_name: employee.last_name,
+                role_id: employee.role_id,
+                manager_id: manager.manager_id,
+              };
+              dbStore
+                .createNewEmployee(newEmployee)
+                .then(() => {
+                  console.log(employee);
+                  console.log(`Inserted Role ${employee.first_name}`);
+                })
+                .then(() => {
+                  mainOptions();
+                });
+            });
+        });
       });
   });
 }
@@ -237,9 +261,10 @@ function createEmployee() {
 // User can Update a Chosen employee
 function updateEmployee() {
   // This retrieves the roles saved in the database
-  dbStore.viewAllRoles().then(([roles]) => {
-    const listOfRoles = roles.map(({ id, title }) => ({
-      name: title,
+
+  dbStore.viewAllEmployees().then(([employees]) => {
+    const listOfEmps = employees.map(({ id, first_name, last_name }) => ({
+      name: first_name + " " + last_name,
       value: id,
     }));
 
@@ -247,28 +272,39 @@ function updateEmployee() {
     inquirer
       .prompt([
         {
-          message: "What is the first name of the employee?",
-          name: "first_name",
-        },
-        {
           type: "list",
-          message: "What role do you want to them update to?",
-          name: "role_id",
-          choices: listOfRoles,
+          message: "What employee do you want to update?",
+          name: "employeeId",
+          choices: listOfEmps,
         },
       ])
-      .then((updated_employee) => {
-        dbStore
-          .updateEmployee(updated_employee)
-          .then(() => {
-            console.log(
-              `Updated ${updated_employee.first_name}  to the Role: ${updated_employee.role_id}`
-            );
-          })
-          .then(() => {
-            // Return to the main menu
-            mainOptions();
-          });
+      .then((employee) => {
+        dbStore.viewAllRoles().then(([roles]) => {
+          const listOfRoles = roles.map(({ id, title }) => ({
+            name: title,
+            value: id,
+          }));
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: " What role would you like to give to this employee?",
+                name: "newRole",
+                choices: listOfRoles,
+              },
+            ])
+            .then((role) => {
+              console.log(employee.employeeId, role.newRole);
+              dbStore
+                .updateEmployee(employee.employeeId, role.newRole)
+                .then(() => {
+                  console.log("Updated Employee w/ new role");
+                })
+                .then(() => {
+                  mainOptions();
+                });
+            });
+        });
       });
   });
 }
