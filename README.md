@@ -41,7 +41,7 @@ Link to Video: Application [Walkthrough](https://youtube.com)
 
 When the application runs, you are presented with these questions:
 
-![Example](Link To Image)
+![Example](https://github.com/yasmin-io/Employee-Tracker/blob/2db7d69e213a29720d73f405c0c935c9e2850abb/Images/Example.png)
 
 ---
 
