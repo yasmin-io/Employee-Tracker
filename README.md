@@ -37,7 +37,7 @@ Finally, when you select 'Quit', you will exited out of the application.
 
 I have created a walkthrough video that will help you understand the full functionality of the command-line application I have built.
 
-Link to Video: Application [Walkthrough](https://youtube.com)
+Click here for the Link to my Walkthrough Video: Application [Walkthrough](https://youtu.be/kJvmJDBykBg)
 
 When the application runs, you are presented with these questions:
 
